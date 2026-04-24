@@ -83,6 +83,21 @@ def callback():
     return "✅ Callback received. You can close this window."
 
 
+@app.route('/debug-config')
+def debug_config():
+    """Debug endpoint to check configuration"""
+    redirect_uri = f"{RENDER_URL}/callback"
+    return jsonify({
+        "RENDER_URL": RENDER_URL,
+        "redirect_uri": redirect_uri,
+        "APP_ID": APP_ID,
+        "request_host": request.host,
+        "request_scheme": request.scheme,
+        "x_forwarded_proto": request.headers.get('X-Forwarded-Proto'),
+        "x_forwarded_host": request.headers.get('X-Forwarded-Host')
+    })
+
+
 # ==========================
 # 🚀 RUN APP
 # ==========================
