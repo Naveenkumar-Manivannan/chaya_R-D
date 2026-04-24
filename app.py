@@ -12,6 +12,9 @@ APP_ID = os.getenv("FB_APP_ID", "777094108561567")
 APP_SECRET = os.getenv("FB_APP_SECRET", "5267b614f80b74826749b9f9796bff2f")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "testtoken")
 
+# Render URL - set this as environment variable for flexibility
+RENDER_URL = os.getenv("RENDER_URL", "https://chaya-r-d.onrender.com")
+
 # ==========================
 
 @app.after_request
@@ -23,16 +26,12 @@ def add_headers(response):
 
 @app.route("/")
 def index():
-    # Get the actual redirect URI dynamically from the request
-    # Works with any domain (SmartASP, ngrok, custom domain, etc.)
-    # Force HTTPS for production (Render uses HTTPS)
-    scheme = request.headers.get('X-Forwarded-Proto', 'https')
-    host = request.headers.get('X-Forwarded-Host', request.host)
-    redirect_uri = f"{scheme}://{host}/callback"
+    # Use the configured RENDER_URL for consistency
+    redirect_uri = f"{RENDER_URL}/callback"
     
     print(f"🔍 INDEX - Redirect URI being sent to frontend: {redirect_uri}")
-    print(f"🔍 Headers: X-Forwarded-Proto={request.headers.get('X-Forwarded-Proto')}, X-Forwarded-Host={request.headers.get('X-Forwarded-Host')}")
-    print(f"🔍 Request: scheme={request.scheme}, host={request.host}")
+    print(f"🔍 RENDER_URL: {RENDER_URL}")
+    print(f"🔍 Request headers - X-Forwarded-Proto: {request.headers.get('X-Forwarded-Proto')}, Host: {request.headers.get('Host')}")
     
     return render_template("index.html", redirect_uri=redirect_uri)
 
@@ -47,17 +46,12 @@ def exchange_token():
         if not code:
             return jsonify({"success": False, "error": "No code provided"})
 
-        # Get the actual redirect URI dynamically
-        # Force HTTPS for production (Render uses HTTPS)
-        scheme = request.headers.get('X-Forwarded-Proto', 'https')
-        host = request.headers.get('X-Forwarded-Host', request.host)
-        redirect_uri = f"{scheme}://{host}/callback"
+        # Use the same RENDER_URL for consistency
+        redirect_uri = f"{RENDER_URL}/callback"
         
         print("\n📥 RECEIVED CODE:", code[:40] if len(code) > 40 else code)
         print("📥 USING REDIRECT URI:", redirect_uri)
-        print("📥 REQUEST HOST:", host)
-        print("📥 REQUEST SCHEME:", scheme)
-        print(f"📥 Headers: X-Forwarded-Proto={request.headers.get('X-Forwarded-Proto')}, X-Forwarded-Host={request.headers.get('X-Forwarded-Host')}")
+        print("📥 RENDER_URL:", RENDER_URL)
 
         token_res = requests.get(
             "https://graph.facebook.com/v18.0/oauth/access_token",
