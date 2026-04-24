@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WhatsApp Embedded Signup</title>
+</head>
+<body>
+
+<h2>📱 WhatsApp Embedded Signup</h2>
+
+<button onclick="connectWhatsApp()" style="padding:12px; background:#1877f2; color:white; border:none;">
+    Connect WhatsApp
+</button>
+
+<p id="status"></p>
+
+<script>
+const REDIRECT_URI = "{{ redirect_uri }}";
+
+window.fbAsyncInit = function () {
+    FB.init({
+        appId: '777094108561567',
+        cookie: true,
+        xfbml: false,
+        version: 'v18.0'
+    });
+
+    console.log("✅ FB SDK Ready");
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function connectWhatsApp() {
+
+    document.getElementById("status").innerText = "Opening WhatsApp setup...";
+    
+    console.log("🔍 REDIRECT_URI being used:", REDIRECT_URI);
+
+    FB.login(function(response) {
+
+        console.log("FB RESPONSE:", response);
+
+        if (response.authResponse && response.authResponse.code) {
+
+            const code = response.authResponse.code;
+
+            document.getElementById("status").innerText = "Processing...";
+
+            fetch("/exchange-token", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ code: code })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("SERVER RESPONSE:", data);
+
+                if (data.success) {
+                    document.getElementById("status").innerText = "✅ WhatsApp Connected!";
+                } else {
+                    document.getElementById("status").innerText = "❌ Error: " + JSON.stringify(data.error);
+                }
+            });
+
+        } else {
+            document.getElementById("status").innerText = "❌ Login failed or cancelled";
+        }
+
+    }, {
+        config_id: "714134081726638",
+        response_type: "code",
+        override_default_response_type: true,
+        redirect_uri: REDIRECT_URI,
+        extras: {
+            setup: {}
+        }
+    });
+}
+</script>
+
+</body>
+</html>

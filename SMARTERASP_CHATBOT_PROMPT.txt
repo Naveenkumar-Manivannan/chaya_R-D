@@ -1,0 +1,57 @@
+Hello,
+
+I have a Premium plan with SmarterASP.NET and need help deploying my Python Flask application for WhatsApp Business API integration.
+
+PROJECT DETAILS:
+- Framework: Flask with Flask-SocketIO
+- Python Version: 3.x (latest stable)
+- Entry Point: wsgi.py (imports from app.py)
+
+MY PROJECT STRUCTURE:
+```
+/
+├── app.py                 (Main Flask application)
+├── wsgi.py               (WSGI entry point)
+├── requirements.txt      (Python dependencies)
+└── templates/
+    └── index.html        (Frontend template)
+```
+
+DEPENDENCIES IN requirements.txt:
+```
+flask
+requests
+flask-socketio
+gunicorn
+```
+
+MY APPLICATION DETAILS:
+- Main file: app.py (Flask app with SocketIO)
+- WSGI entry: wsgi.py (imports app and socketio from app.py)
+- Port: Configured via environment variable PORT (defaults to 5000)
+- Uses dynamic redirect URI detection (works with any domain)
+
+ENVIRONMENT VARIABLES NEEDED:
+- FB_APP_ID (Facebook App ID)
+- FB_APP_SECRET (Facebook App Secret)
+- VERIFY_TOKEN (Webhook verification token)
+- PORT (Application port - please specify what I should use)
+
+WHAT I NEED HELP WITH:
+1. Where exactly should I upload my files? (Which directory path?)
+2. Do I need to configure Python environment myself or will you set it up?
+3. How do I install the packages from requirements.txt?
+4. How do I configure the WSGI server to run my Flask app?
+5. How do I set environment variables for my application?
+6. Does my Premium plan support WebSockets (needed for flask-socketio)?
+7. What will be my application's public URL after deployment?
+8. Are there any specific configuration files I need to create (web.config, .htaccess, etc.)?
+
+MY CURRENT STATUS:
+- Premium plan is active
+- Files are ready to upload
+- Facebook App is configured and waiting for the redirect URI
+
+Please provide step-by-step instructions for deploying this Flask application on my Premium plan.
+
+Thank you!
