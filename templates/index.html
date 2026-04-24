@@ -40,6 +40,7 @@ function connectWhatsApp() {
     document.getElementById("status").innerText = "Opening WhatsApp setup...";
     
     console.log("🔍 REDIRECT_URI being used:", REDIRECT_URI);
+    console.log("🔍 Current window location:", window.location.href);
 
     FB.login(function(response) {
 
@@ -50,6 +51,8 @@ function connectWhatsApp() {
             const code = response.authResponse.code;
 
             document.getElementById("status").innerText = "Processing...";
+            
+            console.log("🔍 Sending code to server, redirect_uri was:", REDIRECT_URI);
 
             fetch("/exchange-token", {
                 method: "POST",

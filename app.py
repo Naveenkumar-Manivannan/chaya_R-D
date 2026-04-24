@@ -25,9 +25,15 @@ def add_headers(response):
 def index():
     # Get the actual redirect URI dynamically from the request
     # Works with any domain (SmartASP, ngrok, custom domain, etc.)
-    scheme = request.headers.get('X-Forwarded-Proto', request.scheme)
-    redirect_uri = f"{scheme}://{request.host}/callback"
+    # Force HTTPS for production (Render uses HTTPS)
+    scheme = request.headers.get('X-Forwarded-Proto', 'https')
+    host = request.headers.get('X-Forwarded-Host', request.host)
+    redirect_uri = f"{scheme}://{host}/callback"
+    
     print(f"🔍 INDEX - Redirect URI being sent to frontend: {redirect_uri}")
+    print(f"🔍 Headers: X-Forwarded-Proto={request.headers.get('X-Forwarded-Proto')}, X-Forwarded-Host={request.headers.get('X-Forwarded-Host')}")
+    print(f"🔍 Request: scheme={request.scheme}, host={request.host}")
+    
     return render_template("index.html", redirect_uri=redirect_uri)
 
 
@@ -42,14 +48,16 @@ def exchange_token():
             return jsonify({"success": False, "error": "No code provided"})
 
         # Get the actual redirect URI dynamically
-        # Works with any domain (SmartASP, custom domain, etc.)
-        scheme = request.headers.get('X-Forwarded-Proto', request.scheme)
-        redirect_uri = f"{scheme}://{request.host}/callback"
+        # Force HTTPS for production (Render uses HTTPS)
+        scheme = request.headers.get('X-Forwarded-Proto', 'https')
+        host = request.headers.get('X-Forwarded-Host', request.host)
+        redirect_uri = f"{scheme}://{host}/callback"
         
         print("\n📥 RECEIVED CODE:", code[:40] if len(code) > 40 else code)
         print("📥 USING REDIRECT URI:", redirect_uri)
-        print("📥 REQUEST HOST:", request.host)
+        print("📥 REQUEST HOST:", host)
         print("📥 REQUEST SCHEME:", scheme)
+        print(f"📥 Headers: X-Forwarded-Proto={request.headers.get('X-Forwarded-Proto')}, X-Forwarded-Host={request.headers.get('X-Forwarded-Host')}")
 
         token_res = requests.get(
             "https://graph.facebook.com/v18.0/oauth/access_token",
