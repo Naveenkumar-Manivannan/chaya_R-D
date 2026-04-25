@@ -12,8 +12,8 @@ APP_ID = os.getenv("FB_APP_ID", "777094108561567")
 APP_SECRET = os.getenv("FB_APP_SECRET", "5267b614f80b74826749b9f9796bff2f")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "testtoken")
 
-# Render URL - set this as environment variable for flexibility
-RENDER_URL = os.getenv("RENDER_URL", "https://chaya-r-d.onrender.com")
+# Use Facebook's default redirect URI (always whitelisted)
+REDIRECT_URI = "https://www.facebook.com/connect/login_success.html"
 
 # ==========================
 
