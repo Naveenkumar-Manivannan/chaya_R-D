@@ -13,7 +13,7 @@ APP_SECRET = os.getenv("FB_APP_SECRET", "5267b614f80b74826749b9f9796bff2f")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "testtoken")
 
 # Use Facebook's default redirect URI (always whitelisted)
-REDIRECT_URI = "https://chaya-r-d.onrender.com/callback/"
+REDIRECT_URI = "https://chaya-r-d.com/callback/"
 
 # ==========================
 
