@@ -13,7 +13,7 @@ APP_SECRET = os.getenv("FB_APP_SECRET", "5267b614f80b74826749b9f9796bff2f")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "testtoken")
 
 # Use Facebook's default redirect URI (always whitelisted)
-REDIRECT_URI = "https://www.facebook.com/connect/login_success.html"
+REDIRECT_URI = "https://chaya-r-d.onrender.com/callback/"
 
 # ==========================
 
@@ -55,7 +55,6 @@ def exchange_token():
             params={
                 "client_id": APP_ID,
                 "client_secret": APP_SECRET,
-                "redirect_uri": redirect_uri,
                 "code": code
             }
         ).json()
@@ -84,7 +83,6 @@ def callback():
 def debug_config():
     """Debug endpoint to check configuration"""
     return jsonify({
-        "REDIRECT_URI": REDIRECT_URI,
         "APP_ID": APP_ID,
         "request_host": request.host,
         "request_scheme": request.scheme,
